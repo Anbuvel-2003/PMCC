@@ -1,89 +1,181 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+    View,
+    Text,
+    TextInput,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableOpacity,
+    StyleSheet,
+    Dimensions,
+    StatusBar
+} from 'react-native';
+import Animated, {
+    useSharedValue,
+    useAnimatedStyle,
+    withSpring,
+    withTiming,
+    withDelay,
+} from 'react-native-reanimated';
 import GradientWrapper from '../components/GradientWrapper';
 import GlassButton from '../components/GlassButton';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+const { width } = Dimensions.get('window');
+
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+
+    // Animation Values
+    const formOpacity = useSharedValue(0);
+    const formY = useSharedValue(30);
+    const logoScale = useSharedValue(0.5);
+    const lightOpacity = useSharedValue(0);
+
+    useEffect(() => {
+        formOpacity.value = withDelay(400, withTiming(1, { duration: 800 }));
+        formY.value = withDelay(400, withSpring(0));
+        logoScale.value = withSpring(1);
+        lightOpacity.value = withDelay(200, withTiming(0.15, { duration: 1500 }));
+    }, []);
 
     const handleLogin = () => {
-        // Basic navigation to Home (Main Drawer)
         navigation.replace('Main');
     };
 
-    return (
-        <GradientWrapper>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                className="flex-1 justify-center px-8"
-            >
-                <View className="items-center mb-12">
-                    <View className="bg-blue-500/20 p-4 rounded-3xl mb-4 border border-blue-400/30">
-                        <Icon name="shield-lock" size={60} color="#60a5fa" />
-                    </View>
-                    <Text className="text-white text-3xl font-bold">Welcome Back</Text>
-                    <Text className="text-slate-400 mt-2">Sign in to continue your journey</Text>
-                </View>
+    const logoAnimatedStyle = useAnimatedStyle(() => ({
+        transform: [{ scale: logoScale.value }],
+    }));
 
-                <View className="space-y-6">
-                    <View>
-                        <Text className="text-slate-400 mb-2 ml-1 text-xs uppercase tracking-widest font-bold">Email Address</Text>
-                        <View className="bg-white/10 flex-row items-center px-4 rounded-2xl border border-white/10 h-16">
-                            <Icon name="email-outline" size={24} color="#94a3b8" />
-                            <TextInput
-                                className="flex-1 text-white ml-3 text-lg"
-                                placeholder="hello@example.com"
-                                placeholderTextColor="#64748b"
-                                value={email}
-                                onChangeText={setEmail}
-                                keyboardType="email-address"
-                                autoCapitalize="none"
+    const formAnimatedStyle = useAnimatedStyle(() => ({
+        opacity: formOpacity.value,
+        transform: [{ translateY: formY.value }],
+    }));
+
+    const lightStyle = useAnimatedStyle(() => ({
+        opacity: lightOpacity.value,
+    }));
+
+    return (
+        <View style={styles.container}>
+            <StatusBar barStyle="light-content" />
+            <GradientWrapper colors={['#0f172a', '#1e293b', '#0f172a']} style={styles.gradient}>
+
+                {/* Stadium Light Rays (Reference from Splash) */}
+                <Animated.View style={[styles.lightRay, styles.lightRay1, lightStyle]} />
+                <Animated.View style={[styles.lightRay, styles.lightRay2, lightStyle]} />
+
+                <KeyboardAvoidingView
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                    className="flex-1 justify-center px-8"
+                >
+                    <Animated.View style={[logoAnimatedStyle, { alignItems: 'center', marginBottom: 48 }]}>
+                        <View className="bg-red-600 p-6 rounded-full border-4 border-white/20 shadow-2xl shadow-red-900">
+                            <Icon name="cricket" size={60} color="white" />
+                        </View>
+                        <View className="mt-4 items-center">
+                            <Text className="text-white text-4xl font-black tracking-tighter italic">
+                                PMCC
+                            </Text>
+                            <View className="h-1 w-12 bg-red-600 rounded-full mt-1" />
+                            <Text className="text-gray-400 text-[10px] font-bold tracking-[8px] uppercase mt-2">
+                                Welcome Back
+                            </Text>
+                        </View>
+                    </Animated.View>
+
+                    <Animated.View style={formAnimatedStyle} className="space-y-6">
+                        <View>
+                            <Text className="text-gray-400 mb-2 ml-1 text-[10px] uppercase tracking-[3px] font-bold">Mobile / Email</Text>
+                            <View className="bg-white/5 flex-row items-center px-4 rounded-2xl border border-white/10 h-16">
+                                <Icon name="account-outline" size={24} color="#ef4444" />
+                                <TextInput
+                                    className="flex-1 text-white ml-3 text-base"
+                                    placeholder="Enter identifier"
+                                    placeholderTextColor="#475569"
+                                    value={email}
+                                    onChangeText={setEmail}
+                                    autoCapitalize="none"
+                                />
+                            </View>
+                        </View>
+
+                        <View className="mt-4">
+                            <Text className="text-gray-400 mb-2 ml-1 text-[10px] uppercase tracking-[3px] font-bold">Secure Access</Text>
+                            <View className="bg-white/5 flex-row items-center px-4 rounded-2xl border border-white/10 h-16">
+                                <Icon name="lock-outline" size={24} color="#ef4444" />
+                                <TextInput
+                                    className="flex-1 text-white ml-3 text-base"
+                                    placeholder="••••••••"
+                                    placeholderTextColor="#475569"
+                                    value={password}
+                                    secureTextEntry={!showPassword}
+                                    onChangeText={setPassword}
+                                />
+                                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                                    <Icon
+                                        name={showPassword ? "eye-outline" : "eye-off-outline"}
+                                        size={22}
+                                        color="#475569"
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
+                        <TouchableOpacity className="items-end mt-2">
+                            <Text className="text-red-500 font-bold text-sm">Need Help?</Text>
+                        </TouchableOpacity>
+
+                        <View className="mt-10">
+                            <GlassButton
+                                onPress={handleLogin}
+                                label="ENTER STADIUM"
+                                containerStyle="py-5 rounded-2xl overflow-hidden border border-red-500/30 bg-red-600/10 shadow-lg"
+                                textStyle="text-white font-black text-center text-lg tracking-[2px] italic"
                             />
                         </View>
-                    </View>
+                    </Animated.View>
 
-                    <View className="mt-4">
-                        <Text className="text-slate-400 mb-2 ml-1 text-xs uppercase tracking-widest font-bold">Password</Text>
-                        <View className="bg-white/10 flex-row items-center px-4 rounded-2xl border border-white/10 h-16">
-                            <Icon name="lock-outline" size={24} color="#94a3b8" />
-                            <TextInput
-                                className="flex-1 text-white ml-3 text-lg"
-                                placeholder="••••••••"
-                                placeholderTextColor="#64748b"
-                                value={password}
-                                secureTextEntry
-                                onChangeText={setPassword}
-                            />
+                    <Animated.View
+                        style={[formAnimatedStyle, { marginTop: 40, alignItems: 'center' }]}
+                    >
+                        <View className="flex-row">
+                            <Text className="text-gray-500 font-medium">New to the League? </Text>
                             <TouchableOpacity>
-                                <Icon name="eye-off-outline" size={22} color="#64748b" />
+                                <Text className="text-red-500 font-black">JOIN TEAM</Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
-
-                    <TouchableOpacity className="items-end mt-2">
-                        <Text className="text-blue-400 font-medium">Forgot Password?</Text>
-                    </TouchableOpacity>
-
-                    <View className="mt-10">
-                        <GlassButton
-                            onPress={handleLogin}
-                            label="Sign In"
-                            containerStyle="py-5 rounded-2xl overflow-hidden border border-blue-400/30 bg-blue-600/20"
-                        />
-                    </View>
-                </View>
-
-                <View className="flex-row justify-center items-center mt-12">
-                    <Text className="text-slate-400">Don't have an account? </Text>
-                    <TouchableOpacity>
-                        <Text className="text-blue-400 font-bold">Sign Up</Text>
-                    </TouchableOpacity>
-                </View>
-            </KeyboardAvoidingView>
-        </GradientWrapper>
+                    </Animated.View>
+                </KeyboardAvoidingView>
+            </GradientWrapper>
+        </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    gradient: {
+        flex: 1,
+    },
+    lightRay: {
+        position: 'absolute',
+        width: width * 1.5,
+        height: 100,
+        backgroundColor: 'white',
+        top: -50,
+    },
+    lightRay1: {
+        left: -width / 2,
+        transform: [{ rotate: '45deg' }],
+    },
+    lightRay2: {
+        right: -width / 2,
+        transform: [{ rotate: '-45deg' }],
+    },
+});
 
 export default LoginScreen;

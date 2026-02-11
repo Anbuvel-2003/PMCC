@@ -1,7 +1,8 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text, Platform } from 'react-native';
+import { View, Text, Platform, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { BlurView } from '@react-native-community/blur';
 
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
@@ -16,19 +17,24 @@ const TabNavigator = () => {
         <Tab.Navigator
             screenOptions={({ route }) => ({
                 headerShown: false,
-                tabBarActiveTintColor: '#d32f2f',
-                tabBarInactiveTintColor: '#777',
+                tabBarActiveTintColor: '#ef4444',
+                tabBarInactiveTintColor: '#475569',
                 tabBarStyle: {
-                    backgroundColor: 'white',
-                    height: Platform.OS === 'ios' ? 88 : 75,
+                    backgroundColor: '#0f172a',
+                    height: Platform.OS === 'ios' ? 90 : 75,
                     borderTopWidth: 1,
-                    borderTopColor: '#f0f0f0',
-                    paddingBottom: Platform.OS === 'ios' ? 25 : 12,
-                    paddingTop: 10,
+                    borderTopColor: 'rgba(255,255,255,0.05)',
+                    paddingBottom: Platform.OS === 'ios' ? 30 : 12,
+                    paddingTop: 12,
+                    position: 'absolute',
+                    elevation: 0,
                 },
                 tabBarLabelStyle: {
                     fontSize: 10,
-                    fontWeight: 'bold',
+                    fontWeight: '900',
+                    textTransform: 'uppercase',
+                    letterSpacing: 1,
+                    marginTop: 4,
                 },
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
@@ -45,7 +51,12 @@ const TabNavigator = () => {
                         iconName = focused ? 'account' : 'account-outline';
                     }
 
-                    return <Icon name={iconName} size={24} color={color} />;
+                    return (
+                        <View style={focused ? styles.activeIconContainer : null}>
+                            <Icon name={iconName} size={focused ? 26 : 22} color={color} />
+                            {focused && <View style={styles.activeDot} />}
+                        </View>
+                    );
                 },
             })}
         >
@@ -57,5 +68,20 @@ const TabNavigator = () => {
         </Tab.Navigator>
     );
 };
+
+const styles = StyleSheet.create({
+    activeDot: {
+        width: 4,
+        height: 4,
+        borderRadius: 2,
+        backgroundColor: '#ef4444',
+        marginTop: 4,
+        alignSelf: 'center',
+    },
+    activeIconContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
+});
 
 export default TabNavigator;
