@@ -280,9 +280,9 @@ const MatchSetupScreen = ({ navigation }) => {
     };
 
     return (
-        <View className="flex-1 bg-[#0f172a]">
+        <View className="flex-1 bg-[#0f172a]" style={{ flex: 1 }}>
             <StatusBar barStyle="light-content" />
-            <GradientWrapper colors={['#0f172a', '#1e293b', '#0f172a']}>
+            <GradientWrapper colors={['#0f172a', '#1e293b', '#0f172a']} style={{ flex: 1 }}>
                 <View className="pt-16 pb-6 px-6 flex-row items-center justify-between">
                     <View>
                         <Text className="text-white text-3xl font-black italic uppercase tracking-tighter">Match Setup</Text>

@@ -15,9 +15,15 @@ const MatchResultCard = ({
     overs1,
     overs2,
     result,
-    winner
+    winner,
+    onScorecardPress,
+    onAnalyticsPress
 }) => (
-    <View className="bg-white/5 p-5 rounded-3xl border border-white/10 mb-5">
+    <TouchableOpacity
+        activeOpacity={0.9}
+        onPress={onScorecardPress}
+        className="bg-white/5 p-5 rounded-3xl border border-white/10 mb-5"
+    >
         {/* Header */}
         <View className="flex-row justify-between items-center mb-4">
             <View className="flex-row items-center">
@@ -65,22 +71,28 @@ const MatchResultCard = ({
         <Text className="text-gray-400 text-xs font-bold italic mb-4">{result}</Text>
 
         {/* Action Buttons */}
-        <View className="flex-row justify-end space-x-3">
-            <TouchableOpacity className="bg-white/5 px-4 py-2 rounded-full border border-white/10">
+        <View className="flex-row justify-end space-x-3 gap-3">
+            <TouchableOpacity
+                onPress={onScorecardPress}
+                className="bg-white/5 px-4 py-2 rounded-full border border-white/10"
+            >
                 <Text className="text-red-500 text-[10px] font-black uppercase tracking-widest">Scorecard</Text>
             </TouchableOpacity>
-            <TouchableOpacity className="bg-red-600 px-4 py-2 rounded-full">
+            <TouchableOpacity
+                onPress={onAnalyticsPress}
+                className="bg-red-600 px-4 py-2 rounded-full"
+            >
                 <Text className="text-white text-[10px] font-black uppercase tracking-widest">Analytics</Text>
             </TouchableOpacity>
         </View>
-    </View>
+    </TouchableOpacity>
 );
 
-const HistoryScreen = () => {
+const HistoryScreen = ({ navigation }) => {
     return (
-        <View className="flex-1 bg-[#0f172a]">
+        <View className="flex-1 bg-[#0f172a]" style={{ flex: 1 }}>
             <StatusBar barStyle="light-content" />
-            <GradientWrapper colors={['#0f172a', '#1e293b', '#0f172a']}>
+            <GradientWrapper colors={['#0f172a', '#1e293b', '#0f172a']} style={{ flex: 1 }}>
                 <View className="pt-16 pb-6 px-6">
                     <Text className="text-white text-3xl font-black italic uppercase tracking-tighter">Match History</Text>
                     <View className="h-1.5 w-16 bg-red-600 rounded-full mt-1" />
@@ -103,6 +115,8 @@ const HistoryScreen = () => {
                         overs2="7.3"
                         winner="Silent Killers"
                         result="Silent Killers won by 6 wickets"
+                        onScorecardPress={() => navigation.navigate('Scorecard', { matchId: '1' })}
+                        onAnalyticsPress={() => navigation.navigate('Analytics', { matchId: '1' })}
                     />
 
                     <MatchResultCard
@@ -117,6 +131,8 @@ const HistoryScreen = () => {
                         overs2="16.4"
                         winner="Kings XI"
                         result="Kings XI won by 65 runs"
+                        onScorecardPress={() => navigation.navigate('Scorecard', { matchId: '2' })}
+                        onAnalyticsPress={() => navigation.navigate('Analytics', { matchId: '2' })}
                     />
                 </ScrollView>
             </GradientWrapper>

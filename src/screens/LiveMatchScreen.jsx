@@ -66,9 +66,9 @@ const LiveMatchScreen = ({ route, navigation }) => {
     const currentOvers = Math.floor(balls / 6) + (balls % 6) / 10;
 
     return (
-        <View className="flex-1 bg-[#0f172a]">
+        <View className="flex-1 bg-[#0f172a]" style={{ flex: 1 }}>
             <StatusBar barStyle="light-content" />
-            <GradientWrapper colors={['#0f172a', '#1e293b', '#0f172a']}>
+            <GradientWrapper colors={['#0f172a', '#1e293b', '#0f172a']} style={{ flex: 1 }}>
                 {/* Header */}
                 <View className="pt-16 pb-4 px-6 flex-row items-center justify-between border-b border-white/5">
                     <TouchableOpacity onPress={() => navigation.goBack()}>

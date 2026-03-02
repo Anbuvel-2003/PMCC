@@ -3,6 +3,8 @@ import { createDrawerNavigator, DrawerContentScrollView } from '@react-navigatio
 import { View, Text, TouchableOpacity, Image, ScrollView, StatusBar } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import TabNavigator from './TabNavigator';
+import auth from '@react-native-firebase/auth';
+import { CommonActions } from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
 
@@ -31,8 +33,22 @@ const DrawerItem = ({ icon, label, tag, tagType = 'default', onPress }) => (
 );
 
 const CustomDrawerContent = (props) => {
+    const handleSignOut = async () => {
+        try {
+            await auth().signOut();
+            props.navigation.dispatch(
+                CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: 'Login' }],
+                })
+            );
+        } catch (error) {
+            console.error('Sign Out Error:', error);
+        }
+    };
+
     return (
-        <View className="flex-1 bg-[#0f172a]">
+        <View className="flex-1 bg-[#0f172a]" style={{ flex: 1 }}>
             {/* Header Profile Section */}
             <View className="bg-slate-900 pt-16 pb-8 px-6 border-b border-white/5">
                 <View className="flex-row items-center">
@@ -73,7 +89,10 @@ const CustomDrawerContent = (props) => {
                 <DrawerItem icon="cog-outline" label="Settings" />
 
                 <View className="p-6 mt-4">
-                    <TouchableOpacity className="bg-white/5 p-4 rounded-2xl border border-white/10 items-center">
+                    <TouchableOpacity
+                        className="bg-white/5 p-4 rounded-2xl border border-white/10 items-center"
+                        onPress={handleSignOut}
+                    >
                         <Text className="text-gray-500 text-[10px] font-black uppercase tracking-[4px]">Sign Out</Text>
                     </TouchableOpacity>
                 </View>

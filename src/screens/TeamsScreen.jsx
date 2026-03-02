@@ -11,7 +11,7 @@ import {
 import GradientWrapper from '../components/GradientWrapper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const TeamCard = ({ name, members, captain, location, viceCaptain }) => (
+const TeamCard = ({ name, members, captain, location, viceCaptain, navigation }) => (
     <View className="bg-white/5 p-5 rounded-3xl border border-white/10 mb-5">
         <View className="flex-row items-center justify-between mb-5">
             <View className="flex-row items-center flex-1">
@@ -36,7 +36,10 @@ const TeamCard = ({ name, members, captain, location, viceCaptain }) => (
                 <Icon name="account-group-outline" size={16} color="#64748b" />
                 <Text className="text-gray-400 text-xs ml-2 font-bold">{members} Members</Text>
             </View>
-            <TouchableOpacity className="bg-white/5 px-4 py-2 rounded-full border border-white/10">
+            <TouchableOpacity
+                onPress={() => navigation.navigate('TeamDashboard', { team: { name, members, captain, location, viceCaptain } })}
+                className="bg-white/5 px-4 py-2 rounded-full border border-white/10"
+            >
                 <Text className="text-red-500 text-[10px] font-black uppercase tracking-widest">Team Profile</Text>
             </TouchableOpacity>
         </View>
@@ -59,16 +62,22 @@ const TeamsScreen = ({ navigation }) => {
     );
 
     return (
-        <View className="flex-1 bg-[#0f172a]">
+        <View className="flex-1 bg-[#0f172a]" style={{ flex: 1 }}>
             <StatusBar barStyle="light-content" />
-            <GradientWrapper colors={['#0f172a', '#1e293b', '#0f172a']}>
+            <GradientWrapper colors={['#0f172a', '#1e293b', '#0f172a']} style={{ flex: 1 }}>
                 {/* Header with Search */}
                 <View className="pt-14 pb-6 px-6">
-                    <View className="flex-row items-center mb-6">
+                    <View className="flex-row items-center justify-between mb-6">
                         <View>
                             <Text className="text-white text-3xl font-black italic uppercase tracking-tighter">My Teams</Text>
                             <View className="h-1.5 w-16 bg-red-600 rounded-full mt-1" />
                         </View>
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('CreateTeam')}
+                            className="bg-white/10 p-2.5 rounded-xl border border-white/10"
+                        >
+                            <Icon name="account-plus" size={24} color="#ef4444" />
+                        </TouchableOpacity>
                     </View>
 
                     <View className="bg-white/5 flex-row items-center px-4 rounded-2xl h-14 border border-white/10">
@@ -92,11 +101,11 @@ const TeamsScreen = ({ navigation }) => {
                 <ScrollView
                     className="flex-1 px-6"
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{ paddingBottom: 180 }}
+                    contentContainerStyle={{ paddingBottom: 100 }}
                 >
                     {filteredTeams.length > 0 ? (
                         filteredTeams.map((team, index) => (
-                            <TeamCard key={index} {...team} />
+                            <TeamCard key={index} {...team} navigation={navigation} />
                         ))
                     ) : (
                         <View className="items-center justify-center pt-20">
@@ -107,18 +116,6 @@ const TeamsScreen = ({ navigation }) => {
                         </View>
                     )}
                 </ScrollView>
-
-                {/* Main Action Button */}
-                <View className="absolute bottom-[100px] left-6 right-6">
-                    <TouchableOpacity
-                        className="bg-red-600 flex-row items-center justify-center p-5 rounded-2xl shadow-2xl shadow-red-900/50"
-                        activeOpacity={0.9}
-                        onPress={() => navigation.navigate('CreateTeam')}
-                    >
-                        <Icon name="plus-circle" size={24} color="white" />
-                        <Text className="text-white font-black ml-2 text-lg italic uppercase tracking-widest">Create New Team</Text>
-                    </TouchableOpacity>
-                </View>
             </GradientWrapper>
         </View>
     );

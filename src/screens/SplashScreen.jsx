@@ -12,6 +12,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import GradientWrapper from '../components/GradientWrapper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import auth from '@react-native-firebase/auth';
 
 const { width, height } = Dimensions.get('window');
 
@@ -37,9 +38,14 @@ const SplashScreen = ({ navigation }) => {
         textOpacity.value = withDelay(1000, withTiming(1, { duration: 800 }));
         textY.value = withDelay(1000, withSpring(0));
 
-        // Navigate to Login after 3.5 seconds
+        // Check auth status and navigate after 3.5 seconds
         const timer = setTimeout(() => {
-            navigation.replace('Login');
+            const user = auth().currentUser;
+            if (user) {
+                navigation.replace('Main');
+            } else {
+                navigation.replace('Login');
+            }
         }, 3500);
 
         return () => clearTimeout(timer);

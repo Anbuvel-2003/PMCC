@@ -5,9 +5,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const UploadScreen = () => {
     return (
-        <View className="flex-1 bg-[#0f172a]">
+        <View className="flex-1 bg-[#0f172a]" style={{ flex: 1 }}>
             <StatusBar barStyle="light-content" />
-            <GradientWrapper colors={['#0f172a', '#1e293b', '#0f172a']}>
+            <GradientWrapper colors={['#0f172a', '#1e293b', '#0f172a']} style={{ flex: 1 }}>
                 <View className="pt-16 pb-6 px-6">
                     <Text className="text-white text-3xl font-black italic uppercase tracking-tighter">Upload Highlights</Text>
                     <View className="h-1.5 w-16 bg-red-600 rounded-full mt-1" />

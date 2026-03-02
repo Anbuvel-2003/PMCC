@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "26899458033",
+    "project_id": "pmcc-8f2dd",
+    "storage_bucket": "pmcc-8f2dd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:26899458033:android:e4b1b0060894061048c650",
+        "android_client_info": {
+          "package_name": "com.pmcc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXeAJC3hG4bqftLAbtUmvFRJCJ5lm64Ik"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

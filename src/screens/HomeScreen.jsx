@@ -13,9 +13,9 @@ const StatCard = ({ label, value, icon, color }) => (
 
 const HomeScreen = ({ navigation }) => {
     return (
-        <View className="flex-1 bg-[#0f172a]">
+        <View className="flex-1 bg-[#0f172a]" style={{ flex: 1 }}>
             <StatusBar barStyle="light-content" />
-            <GradientWrapper colors={['#0f172a', '#1e293b', '#0f172a']}>
+            <GradientWrapper colors={['#0f172a', '#1e293b', '#0f172a']} style={{ flex: 1 }}>
                 {/* Header */}
                 <View className="pt-14 pb-4 px-6 flex-row items-center justify-between">
                     <View className="flex-row items-center">
@@ -31,10 +31,10 @@ const HomeScreen = ({ navigation }) => {
                         </View>
                     </View>
                     <View className="flex-row">
-                        <TouchableOpacity className="bg-white/10 p-2 rounded-xl border border-white/10 mr-2">
-                            <Icon name="magnify" size={24} color="white" />
-                        </TouchableOpacity>
-                        <TouchableOpacity className="bg-white/10 p-2 rounded-xl border border-white/10">
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('Notifications')}
+                            className="bg-white/10 p-2 rounded-xl border border-white/10"
+                        >
                             <Icon name="bell-outline" size={24} color="white" />
                         </TouchableOpacity>
                     </View>
@@ -56,10 +56,28 @@ const HomeScreen = ({ navigation }) => {
                     </View>
 
                     {/* Stats Row */}
-                    <View className="flex-row px-3 mb-8">
+                    <View className="flex-row px-3 mb-4">
                         <StatCard label="Matches" value="24" icon="cricket" color="#ef4444" />
                         <StatCard label="Runs" value="842" icon="run-fast" color="#ef4444" />
                         <StatCard label="Wickets" value="12" icon="bowling" color="#ef4444" />
+                    </View>
+
+                    <View className="px-4 mb-8">
+                        <TouchableOpacity
+                            onPress={() => navigation.navigate('Squad')}
+                            className="bg-white/5 p-5 rounded-3xl border border-white/10 flex-row items-center"
+                        >
+                            <View className="w-12 h-12 rounded-2xl bg-red-600/20 items-center justify-center border border-red-500/30">
+                                <Icon name="account-group-outline" size={26} color="#ef4444" />
+                            </View>
+                            <View className="ml-4 flex-1">
+                                <Text className="text-white text-lg font-black italic tracking-tighter uppercase">My Squad</Text>
+                                <Text className="text-gray-500 text-[10px] font-black uppercase tracking-widest mt-0.5">Manage Your Team Players</Text>
+                            </View>
+                            <View className="bg-white/5 p-2 rounded-xl">
+                                <Icon name="chevron-right" size={24} color="#475569" />
+                            </View>
+                        </TouchableOpacity>
                     </View>
 
                     {/* Active Matches Header */}
